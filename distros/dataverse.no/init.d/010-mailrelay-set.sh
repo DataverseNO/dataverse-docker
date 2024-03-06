@@ -7,3 +7,8 @@ if [ "${system_email}" ]; then
     asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} delete-javamail-resource mail/notifyMailSession
     asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} create-javamail-resource --mailhost ${mailhost} --mailuser ${mailuser} --fromaddress ${no_reply_email} --property mail.smtp.auth=false:mail.smtp.password=${smtp_password}:mail.smtp.port=${smtp_port}:mail.smtp.socketFactory.port=${socket_port}:mail.smtp.socketFactory.fallback=false mail/notifyMailSession
 fi
+
+
+asadmin delete-jvm-options --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} "-dataverse.mail.support-email"
+asadmin create-jvm-options --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} "-dataverse.mail.support-email=$support_email"
+

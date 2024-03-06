@@ -1,0 +1,11 @@
+truncate datafile;
+truncate filemetadata CASCADE;
+truncate dataset CASCADE;
+truncate datasetversion CASCADE;
+truncate datasetlock;
+truncate datafilecategory CASCADE;
+truncate datasetmetrics CASCADE;
+truncate datatable CASCADE;
+truncate ingestreport;
+truncate dataversesubjects;
+truncate dataversefacet;
