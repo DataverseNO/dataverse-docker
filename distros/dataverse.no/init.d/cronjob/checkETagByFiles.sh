@@ -39,7 +39,7 @@ while true; do
 		fi
 	fi
 
-	tail -n +1 "/tmp/dataverse_checkETag.txt" > "/tmp/dataverse_checkETag.txt.tmp"
+	tail -n +2 "/tmp/dataverse_checkETag.txt" > "/tmp/dataverse_checkETag.txt.tmp"
 	mv "/tmp/dataverse_checkETag.txt.tmp" "/tmp/dataverse_checkETag.txt"
 
 	if [ ! -s "/tmp/dataverse_checkETag.txt" ]; then
