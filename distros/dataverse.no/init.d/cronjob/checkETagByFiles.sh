@@ -25,12 +25,14 @@ while read p; do
 
 
 	if [ -z "${s3ETag}" ]; then
-		echo "is not exist in the s3 storage: ${arrayData[0]}" > ${LogFile}
+		echo "is not exist in the s3 storage: ${arrayData[0]}" >> ${LogFile}
 	else
 
 		if [ "${s3ETag}" != "${arrayData[1]}" ]; then
-			echo "is not equal: ${arrayData[0]}" > ${LogFile}
+			echo "is not equal: ${arrayData[0]}" >> ${LogFile}
 		fi
 	fi
+
+	sleep 1s
 
 done < /tmp/dataverse_checkETag.txt
