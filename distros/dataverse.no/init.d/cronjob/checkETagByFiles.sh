@@ -15,14 +15,20 @@ fi
 
 LogFile="${LogDir}checkETag_`date +%Y%m%d_%H%M%z`.log"
 
-psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkfiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /tmp/dataverse_checkETag.txt
+if [ ! -f "/tmp/dataverse_checkETag.txt" ]; then
+	psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkfiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /tmp/dataverse_checkETag.txt
+fi
 
-while read p; do
-	IFS=' ' read -a arrayData <<< "$p"
+#while read p; do
+while true; do
+
+	line=$(head -n 1 /tmp/dataverse_checkETag.txt)
+
+	IFS=' ' read -a arrayData <<< "$line"
 	#echo ${arrayData[0]}
 
 	s3ETag=$(aws s3api --endpoint https://$aws_endpoint head-object --bucket $aws_bucket_name --key ${arrayData[0]}  2> /dev/null | jq .ETag | sed 's/\"//g' | sed 's/\\//g')
-
+	
 
 	if [ -z "${s3ETag}" ]; then
 		echo "is not exist in the s3 storage: ${arrayData[0]}" >> ${LogFile}
@@ -33,6 +39,16 @@ while read p; do
 		fi
 	fi
 
-	sleep 1s
+	tail -n +1 "/tmp/dataverse_checkETag.txt" > "/tmp/dataverse_checkETag.txt.tmp"
+	mv "/tmp/dataverse_checkETag.txt.tmp" "/tmp/dataverse_checkETag.txt"
 
-done < /tmp/dataverse_checkETag.txt
+	if [ ! -s "/tmp/dataverse_checkETag.txt" ]; then
+		exit 0
+	fi
+
+	sleep 1s
+done
+#done < /tmp/dataverse_checkETag.txt
+
+
+rm /tmp/dataverse_checkETag.txt
