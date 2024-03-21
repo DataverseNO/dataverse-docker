@@ -65,7 +65,7 @@ services:
       networks:
         - traefik
       #image: test03/shibboleth:3.3.0.B
-      image: ${DOCKER_HUB}/shibboleth:3.4.1-1
+      image: ${DOCKER_HUB}/shibboleth:3.4.1-2
       container_name: shibboleth
       hostname: shibboleth
       privileged: true
@@ -76,10 +76,12 @@ services:
         - ${LOGS_PATH}/shibboleth/httpd:/var/log/httpd
       # - ${LOGS_PATH}/shibboleth/shibboleth:/var/log/shibboleth
         - ${CONFIGURATION_PATH}/shibboleth:/etc/shibboleth
-        - ./configs/http-ssl.conf:/etc/httpd/conf.d/ssl.conf
+      # - ./configs/http-ssl.conf:/etc/httpd/conf.d/ssl.conf
+        - ./configs/http-ssl.conf:/usr/local/apache2/conf/httpd.conf
+        - ./configs/http-dataverse.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
         - ./configs/robots.txt:/var/www/robots.txt
-        - ${CONFIGURATION_PATH}/configuration/files/localhost.pem:/etc/pki/tls/certs/localhost.crt
-        - ${CONFIGURATION_PATH}/configuration/files/localhost.key:/etc/pki/tls/private/localhost.key
+        - ${CONFIGURATION_PATH}/configuration/files/localhost.pem:/etc/ssl/certs/localhost.crt
+        - ${CONFIGURATION_PATH}/configuration/files/localhost.key:/etc/ssl/private/localhost.key
     # hostname: ${hostname}
       labels:
         - "traefik.enable=true"
