@@ -46,6 +46,7 @@ while true; do
 		mv "/mnt/dataverse_checkETag.txt.tmp" "/mnt/dataverse_checkETag.txt"
 
 		if [ ! -s "/mnt/dataverse_checkETag.txt" ]; then
+			rm /mnt/dataverse_checkETag.txt
 			exit 0
 		fi
 
@@ -53,5 +54,4 @@ while true; do
 	fi
 done
 
-
-rm /mnt/dataverse_checkETag.txt
+exit 0
