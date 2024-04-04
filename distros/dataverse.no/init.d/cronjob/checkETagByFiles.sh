@@ -44,7 +44,7 @@ while true; do
 		#tail -n +2 "/mnt/dataverse_checkETag.txt" > "/mnt/dataverse_checkETag.txt.tmp"
 		#mv "/mnt/dataverse_checkETag.txt.tmp" "/mnt/dataverse_checkETag.txt"
 
-		sed '1d' "/mnt/dataverse_checkETag.txt"
+		sed '1d' "/mnt/dataverse_checkETag.txt" > "/mnt/dataverse_checkETag.txt"
 
 		if [ ! -s "/mnt/dataverse_checkETag.txt" ]; then
 			exit 0
