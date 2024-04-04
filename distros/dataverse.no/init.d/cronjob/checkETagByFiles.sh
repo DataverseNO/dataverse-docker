@@ -14,17 +14,17 @@ if [ ! -d "/mnt/" ]; then
 fi
 
 LogFile="${LogDir}checkETag_`date +%Y%m%d_%H%M%z`.log"
-if [ ! -f "/mnt/dataverse_checkETag.txt" ]; then
+if [ ! -f "/mnt/checkETagByFiles.txt" ]; then
 	echo "`date +%Y%m%d_%H%M%z`: Start psql" > ${LogFile}
-	psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkfiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /mnt/dataverse_checkETag.txt
+	psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkETagByFiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /mnt/checkETagByFiles.txt
 	echo "`date +%Y%m%d_%H%M%z`: END psql" >> ${LogFile}
 fi
 
 #while read p; do
 while true; do
 
-	if [ -f "/mnt/dataverse_checkETag.txt" ]; then
-		line=$(head -n 1 /mnt/dataverse_checkETag.txt)
+	if [ -f "/mnt/checkETagByFiles.txt" ]; then
+		line=$(head -n 1 /mnt/checkETagByFiles.txt)
 
 		IFS=' ' read -a arrayData <<< "$line"
 		#echo ${arrayData[0]}
@@ -41,12 +41,12 @@ while true; do
 			fi
 		fi
 
-		#tail -n +2 "/mnt/dataverse_checkETag.txt" > "/mnt/dataverse_checkETag.txt.tmp"
-		sed '1d' "/mnt/dataverse_checkETag.txt" > "/mnt/dataverse_checkETag.txt.tmp"
-		mv "/mnt/dataverse_checkETag.txt.tmp" "/mnt/dataverse_checkETag.txt"
+		#tail -n +2 "/mnt/checkETagByFiles.txt" > "/mnt/checkETagByFiles.txt.tmp"
+		sed '1d' "/mnt/checkETagByFiles.txt" > "/mnt/checkETagByFiles.txt.tmp"
+		mv "/mnt/checkETagByFiles.txt.tmp" "/mnt/checkETagByFiles.txt"
 
-		if [ ! -s "/mnt/dataverse_checkETag.txt" ]; then
-			rm /mnt/dataverse_checkETag.txt
+		if [ ! -s "/mnt/checkETagByFiles.txt" ]; then
+			rm /mnt/checkETagByFiles.txt
 			exit 0
 		fi
 
