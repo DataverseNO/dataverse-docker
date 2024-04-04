@@ -9,20 +9,20 @@ if [ ! -d "${LogDir}" ]; then
 	LogDir="/var/log/"
 fi
 
-if [ ! -d "/tmp/" ]; then
-	 mkdir -p "/tmp/"
+if [ ! -d "/mnt/" ]; then
+	 mkdir -p "/mnt/"
 fi
 
 LogFile="${LogDir}checkETag_`date +%Y%m%d_%H%M%z`.log"
 
-if [ ! -f "/tmp/dataverse_checkETag.txt" ]; then
+if [ ! -f "/mnt/dataverse_checkETag.txt" ]; then
 	psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkfiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /tmp/dataverse_checkETag.txt
 fi
 
 #while read p; do
 while true; do
 
-	line=$(head -n 1 /tmp/dataverse_checkETag.txt)
+	line=$(head -n 1 /mnt/dataverse_checkETag.txt)
 
 	IFS=' ' read -a arrayData <<< "$line"
 	#echo ${arrayData[0]}
@@ -39,16 +39,17 @@ while true; do
 		fi
 	fi
 
-	tail -n +2 "/tmp/dataverse_checkETag.txt" > "/tmp/dataverse_checkETag.txt.tmp"
-	mv "/tmp/dataverse_checkETag.txt.tmp" "/tmp/dataverse_checkETag.txt"
+	#tail -n +2 "/mnt/dataverse_checkETag.txt" > "/mnt/dataverse_checkETag.txt.tmp"
+	#mv "/mnt/dataverse_checkETag.txt.tmp" "/mnt/dataverse_checkETag.txt"
 
-	if [ ! -s "/tmp/dataverse_checkETag.txt" ]; then
+	sed '1d' "/mnt/dataverse_checkETag.txt"
+
+	if [ ! -s "/mnt/dataverse_checkETag.txt" ]; then
 		exit 0
 	fi
 
 	sleep 1s
 done
-#done < /tmp/dataverse_checkETag.txt
 
 
-rm /tmp/dataverse_checkETag.txt
+rm /mnt/dataverse_checkETag.txt
