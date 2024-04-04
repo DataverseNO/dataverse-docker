@@ -16,7 +16,7 @@ fi
 LogFile="${LogDir}checkETag_`date +%Y%m%d_%H%M%z`.log"
 if [ ! -f "/mnt/dataverse_checkETag.txt" ]; then
 	echo "`date +%Y%m%d_%H%M%z`: Start psql" > ${LogFile}
-	psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkfiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /mnt/dataverse_checkETag.txt
+	psql -h ${DATAVERSE_DB_HOST} -U ${DATAVERSE_DB_USER} ${POSTGRES_DATABASE} -f ${INIT_SCRIPTS_FOLDER}/cronjob/checkETagByFiles.sql | grep S3 | awk '{split($0,a,"|"); print a[2] a[3]}' | sed "s/S3:\/\/$aws_bucket_name://" > /mnt/dataverse_checkETag.txt
 	echo "`date +%Y%m%d_%H%M%z`: END psql" >> ${LogFile}
 fi
 
