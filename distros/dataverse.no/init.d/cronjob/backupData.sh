@@ -33,7 +33,7 @@ for  file in $files
 	done
 #echo $files
 
-rm -rf ~/.aws
+#rm -rf ~/.aws
 
 #cp -r /secrets/aws-cli/.aws ~
 #aws s3 --endpoint https://$aws_endpoint cp s3://$aws_bucket_name/$file  /data/$file
