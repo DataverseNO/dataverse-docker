@@ -11,8 +11,9 @@ cp -r /secrets/aws-cli/.aws ~
 
 dumpName="dataverse.`date +%Y%m%d_%H%M%z`.dump.gz"
 
-if [ -d "/mntblob/data/databaseDumps/" ]; then
-	 cp /mnt/dataverse.dump.gz /mntblob/data/databaseDumps/${dumpName}
+if [ -d "/data/databaseDumps/" ]; then
+	 cp /mnt/dataverse.dump.gz /data/databaseDumps/${dumpName}
+	 echo "copied" ${dumpName}
 fi
 
 aws s3 --endpoint https://$aws_endpoint cp /mnt/dataverse.dump.gz s3://$aws_bucket_name/databaseDumps/${dumpName}
