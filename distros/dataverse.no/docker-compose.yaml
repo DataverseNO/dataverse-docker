@@ -193,6 +193,8 @@ services:
         - "DATAVERSE_DB_NAME"
         - "DATAVERSE_SERVICE_HOST"
         - "DATAVERSE_URL"
+        - "BASEURL"
+        - "KEYWINDOWSBLOB"
         - "SOLR_SERVICE_HOST"
         - "SOLR_SERVICE_PORT"
         - "CVM_SERVER_URL=https://ns.${traefikhost}"

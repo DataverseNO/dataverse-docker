@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#BASEURL="https://....blob.core.windows.net/data1"
+#KEYWINDOWSBLOB=""
+
+BASEURL="$1"
+KEYWINDOWSBLOB="$2"
+
 export PGPASSWORD=`cat /secrets/db/password`
 cp -r /secrets/aws-cli/.aws ~
 
@@ -27,17 +33,25 @@ while true; do
 		line=$(head -n 1 /mnt/checkETagByFiles.txt)
 
 		IFS=' ' read -a arrayData <<< "$line"
-		#echo ${arrayData[0]}
 
-		s3ETag=$(aws s3api --endpoint https://$aws_endpoint head-object --bucket $aws_bucket_name --key ${arrayData[0]}  2> /dev/null | jq .ETag | sed 's/\"//g' | sed 's/\\//g')
+		#s3ETag=$(aws s3api --endpoint https://$aws_endpoint head-object --bucket $aws_bucket_name --key ${arrayData[0]}  2> /dev/null | jq .ETag | sed 's/\"//g' | sed 's/\\//g')
 		
+		#curl -s "https://....blob.core.windows.net/data1?sp=r&st=2024-04-15T10:25:37Z&se=2024-04-15T18:25:37Z&spr=https&sv=2022-11-02&sr=c&sig=" -I -q | grep "Content-MD5:" | awk '{ print $2 }' | base64 -di | xxd -p
+		arrayData[0]=$(echo ${arrayData[0]} | sed -e 's/S3\:\/\/2002-yellow-dataverseno\://g')
+		md5BlobBase64=$(curl -s "${BASEURL}${arrayData[0]}${KEYWINDOWSBLOB}" -I -q | grep "Content-MD5: " | awk '{ print $2 }' | base64 -di)
 
-		if [ -z "${s3ETag}" ]; then
-			echo "is not exist in the s3 storage: ${arrayData[0]} --  ${arrayData[1]}" >> ${LogFile}
-		else
+		if [ $? -eq 0 ]; then
+			md5Blob=$(echo "$md5BlobBase64" | xxd -p)
 
-			if [ "${s3ETag}" != "${arrayData[1]}" ]; then
-				echo "is not equal: ${arrayData[0]} --  ${arrayData[1]}" >> ${LogFile}
+			#if [ -z "${s3ETag}" ]; then
+			if [ -z "${md5BlobBase64}" ]; then
+				echo "is not exist in the s3 storage: ${arrayData[0]} --  ${arrayData[1]}" >> ${LogFile}
+			else
+
+				#if [ "${s3ETag}" != "${arrayData[1]}" ]; then
+				if [ "${md5Blob}" != "${arrayData[1]}" ]; then
+					echo "is not equal: ${arrayData[0]} --  ${arrayData[1]}" >> ${LogFile}
+				fi
 			fi
 		fi
 
