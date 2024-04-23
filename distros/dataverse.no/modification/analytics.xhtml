@@ -132,6 +132,7 @@
   
               const modalContentHeaderClose = document.createElement("span");
               modalContentHeaderClose.className = "close";
+              modalContentHeaderClose.innerHTML = "\&times;";
               modalContentHeader.appendChild(modalContentHeaderClose);
   
               const modalContentHeaderTitle = document.createElement("h2");
@@ -146,7 +147,7 @@
               modalContentBody.appendChild(modalContentBodyNoScript);
   
               const modalContentBodyIframe = document.createElement("iframe");
-              modalContentBodyIframe.src = "https://www.ub.uit.no/matomo/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=ffffff&fontColor=000000&fontFamily=sans-serif";
+              modalContentBodyIframe.src = "https://www.ub.uit.no/matomo/index.php?module=CoreAdminHome&action=optOut\&language=en&backgroundColor=ffffff\&fontColor=000000&fontFamily=sans-serif";
               modalContentBodyNoScript.appendChild(modalContentBodyIframe);
   
               const modalContentBodyBodyLoadError = document.createElement("div");
