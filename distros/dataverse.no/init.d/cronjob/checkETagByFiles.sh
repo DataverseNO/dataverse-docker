@@ -3,8 +3,8 @@
 #BASEURL="https://....blob.core.windows.net/data1"
 #KEYWINDOWSBLOB=""
 
-BASEURL="$1"
-KEYWINDOWSBLOB="$2"
+#BASEURL="$1"
+#KEYWINDOWSBLOB="$2"
 
 export PGPASSWORD=`cat /secrets/db/password`
 cp -r /secrets/aws-cli/.aws ~
