@@ -2,6 +2,7 @@
 
 #BASEURL="https://....blob.core.windows.net/data1"
 #KEYWINDOWSBLOB=""
+FILEPATH="/databaseDumps/"
 
 #BASEURL="$1"
 #KEYWINDOWSBLOB="$2"
@@ -38,7 +39,7 @@ while true; do
 		
 		#curl -s "https://....blob.core.windows.net/data1?sp=r&st=2024-04-15T10:25:37Z&se=2024-04-15T18:25:37Z&spr=https&sv=2022-11-02&sr=c&sig=" -I -q | grep "Content-MD5:" | awk '{ print $2 }' | base64 -di | xxd -p
 		arrayData[0]=$(echo ${arrayData[0]} | sed -e 's/S3\:\/\/2002-yellow-dataverseno\://g')
-		md5BlobBase64=$(curl -s "${BASEURL}${arrayData[0]}${KEYWINDOWSBLOB}" -I -q | grep "Content-MD5: " | awk '{ print $2 }' | base64 -di)
+		md5BlobBase64=$(curl -s "${BASEURL}${FILEPATH}${arrayData[0]}${KEYWINDOWSBLOB}" -I -q | grep "Content-MD5: " | awk '{ print $2 }' | base64 -di)
 
 		if [ $? -eq 0 ]; then
 			md5Blob=$(echo "$md5BlobBase64" | xxd -p)
