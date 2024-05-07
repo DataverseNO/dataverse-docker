@@ -2,7 +2,7 @@
 
 #BASEURL="https://....blob.core.windows.net/data1"
 #KEYWINDOWSBLOB=""
-FILEPATH="/databaseDumps/"
+FILEPATH="/data/dataverse-files/"
 
 #BASEURL="$1"
 #KEYWINDOWSBLOB="$2"
