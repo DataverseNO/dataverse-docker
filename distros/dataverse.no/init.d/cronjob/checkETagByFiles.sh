@@ -42,7 +42,7 @@ while true; do
 		md5BlobBase64=$(curl -s "${BASEURL}${FILEPATH}${arrayData[0]}${KEYWINDOWSBLOB}" -I -q | grep "Content-MD5: " | awk '{ print $2 }' | base64 -di)
 
 		if [ $? -eq 0 ]; then
-			md5Blob=$(echo "$md5BlobBase64" | xxd -p)
+			md5Blob=$(echo -n "$md5BlobBase64" | xxd -p)
 
 			#if [ -z "${s3ETag}" ]; then
 			if [ -z "${md5BlobBase64}" ]; then
