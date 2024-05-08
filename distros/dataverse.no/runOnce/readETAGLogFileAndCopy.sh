@@ -10,6 +10,8 @@ BaseFolder="/dataverse/dataverse-files"
 FILEPATH="/dataCorrect/dataverse-files/"
 LogFile="./checkETAG_2024.log"
 
+S3URLAWS="s3://URL/"
+
 
 while true; do
 
@@ -32,7 +34,7 @@ while true; do
                     if [ "${CheckMd5Database}" == "${md5Blob}" ]; then
 
                         cp -fa ${OGINALBaseFolder}${FileCopy} ${BaseFolder}${FileCopy} 
-                        aws s3 cp ${OGINALBaseFolder}${FileCopy} s3://URL/ --recursive
+                        aws s3 cp ${OGINALBaseFolder}${FileCopy} ${S3URLAWS}${FileCopy} --recursive
 
                         sed '1d' "${LogFile}" > "${LogFile}.tmp"
                         mv "${LogFile}.tmp" "${LogFile}"
