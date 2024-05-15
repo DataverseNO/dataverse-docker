@@ -65,7 +65,7 @@ services:
       networks:
         - traefik
       #image: test03/shibboleth:3.3.0.B
-      image: ${DOCKER_HUB}/shibboleth:3.4.1-2
+      image: ${DOCKER_HUB}/shibboleth:3.4.1-3
       container_name: shibboleth
       hostname: shibboleth
       privileged: true
