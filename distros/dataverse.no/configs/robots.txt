@@ -14,8 +14,8 @@ Allow: /dataset.xhtml
 Allow: /dataverse/
 Allow: /sitemap/
 # The following lines are for the facebook, twitter and linkedin preview bots:
-Allow: /api/datasets/:persistentId/thumbnail
-Allow: /javax.faces.resource/images/
+Disallow: /api/datasets/:persistentId/thumbnail
+Disallow: /javax.faces.resource/images/
 # Comment out the following TWO lines if you DON'T MIND the bots crawling the search API links on dataverse pages:
 Disallow: /dataverse/*?q
 Disallow: /dataverse/*/search
@@ -23,4 +23,4 @@ Disallow: /
 # Crawl-delay specification *may* be honored by *some* bots. 
 # It is *definitely* ignored by Googlebot (they never promise to 
 # recognize it either - it's never mentioned in their documentation)
-Crawl-delay: 20
+Crawl-delay: 30
